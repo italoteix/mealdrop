@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react'
+import { DetailedHTMLProps, InputHTMLAttributes, forwardRef, ForwardedRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Body } from '../typography/Body'
@@ -46,13 +46,18 @@ type InputProps = {
   onChange?: (data: any) => void
 } & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
-export const Input = ({ label = '', type = 'text', id, ...otherProps }: InputProps) => (
-  <Container>
-    <input id={id} type={type} {...otherProps} />
-    {label && (
-      <Body type="label" htmlFor={id}>
-        {label}
-      </Body>
-    )}
-  </Container>
+export const Input = forwardRef(
+  (
+    { label = '', type = 'text', id, ...otherProps }: InputProps,
+    ref: ForwardedRef<HTMLInputElement>
+  ) => (
+    <Container>
+      <input id={id} type={type} ref={ref} {...otherProps} />
+      {label && (
+        <Body type="label" htmlFor={id}>
+          {label}
+        </Body>
+      )}
+    </Container>
+  )
 )

@@ -1,10 +1,21 @@
-import { Step, useForm, useStep } from 'react-hooks-helper'
+import { useState } from 'react'
+import { Step, useStep } from 'react-hooks-helper'
 import styled, { css } from 'styled-components'
 
 import { ContactDetails } from './ContactDetails'
 import { DeliveryDetails } from './DeliveryDetails'
 import Submit from './Submit'
 import { StepIndicator } from './StepIndicator'
+
+export interface FormData {
+  firstName: string
+  lastName: string
+  address: string
+  city: string
+  postcode: string
+  email: string
+  phone: string
+}
 
 const steps: Step[] = [{ id: 'Contact details' }, { id: 'Delivery details' }]
 
@@ -43,11 +54,15 @@ const FormContainer = styled.div(
 )
 
 export const MultiStepForm = () => {
-  const [formData, setForm] = useForm(defaultData)
+  const [formData, setFormData] = useState<FormData>(defaultData)
   const { step, navigation, index } = useStep({ initialStep: 0, steps })
 
+  const updateFormData = (stepData: Partial<FormData>) => {
+    setFormData((prevData) => ({ ...prevData, ...stepData }))
+  }
+
   const currentStepId = (step as Step).id
-  const props = { formData, setForm, navigation }
+  const props = { formData, updateFormData, navigation }
   const currentIndex = index + 1
 
   return (
